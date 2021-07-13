@@ -1,6 +1,6 @@
 <template>
   <div class="post">
-    <div>
+    <div class="post__item">
       <div>
         PostId <strong>{{ post.id }}</strong>
       </div>
@@ -9,12 +9,12 @@
       </div>
       <div><strong>Описание: </strong>{{ post.body }}</div>
     </div>
-    <div>
-      <my-button 
-        class="btn__remove" 
-        @click="$emit('remove',post)"
-      >
-      Удалить
+    <div class="post__btns">
+      <my-button @click="$router.push(`/posts/${post.id}`)">
+        Открыть
+      </my-button>
+      <my-button class="post__btns remove" @click="$emit('remove', post)">
+        Удалить
       </my-button>
     </div>
   </div>
@@ -22,7 +22,7 @@
 
 <script>
 export default {
-  emits:['remove'],
+  emits: ["remove"],
   props: ["post"],
 };
 </script>
@@ -30,17 +30,23 @@ export default {
 <style scoped>
 .post {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-
   padding: 15px;
   border: 2px solid teal;
   border-radius: 10px;
   margin-top: 15px;
 }
-.btn__remove {
+.post__item {
+  padding-right: 15px;
+}
+.post__btns {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+.post__btns.remove {
   border-color: #800;
   color: #800;
-  margin: 10px;
 }
 </style>

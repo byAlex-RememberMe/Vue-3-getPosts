@@ -1,7 +1,7 @@
 <template>
   <div >
     <h1>Новости</h1>
-    <my-input v-model="searchQuery" placeholder="Поиск..." />
+    <my-input v-focus v-model="searchQuery" placeholder="Поиск..." />
     <div class="btns">
       <my-button @click="showDialog">Создать пост</my-button>
       <my-select v-model="selectedSort" :options="sortOptions" />
@@ -15,7 +15,6 @@
       :posts="sortedAndSearchedPosts"
     ></post-list>
     <my-spinner v-else></my-spinner>
-    <div ref="observer" class="observer"></div>
     <!-- <div class="page__wrapper">
       <button 
         class="page__number"
@@ -28,6 +27,7 @@
       </button>
     </div> -->
   </div>
+    <div v-intersection="loadMorePages" class="observer"></div>
 </template>
 
 <script>
@@ -59,18 +59,7 @@ export default {
     };
   },
   mounted() {
-    this.getPosts();
-    const options = {
-      rootMargin: "0px",
-      threshold: 1.0,
-    };
-    const callback = (entries, observer) => {
-      if(entries[0].isIntersecting && this.page < this.totalPages){
-        this.loadMorePages()
-      }
-    };
-    const observer = new IntersectionObserver(callback, options);
-    observer.observe(this.$refs.observer)
+    this.getPosts();    
   },
   methods: {
     createNewPost(post) {
@@ -78,7 +67,7 @@ export default {
       this.dialogVisible = false;
     },
     removePost(post) {
-      this.posts = this.posts.filter((p) => p.id !== post.id);
+      confirm('Вы точно хотите удалить пост?')?this.posts = this.posts.filter((p) => p.id !== post.id):alert('Вам виднее...')
     },
     showDialog() {
       this.dialogVisible = true;
@@ -89,7 +78,6 @@ export default {
     async getPosts() {
       this.isPostsLoading = true;
       try {
-        setTimeout(async () => {
           const response = await axios.get(
             "https://jsonplaceholder.typicode.com/posts",
             {
@@ -102,9 +90,9 @@ export default {
           this.totalPages = Math.ceil(
             response.headers["x-total-count"] / this.limit
           );
+          console.log(this.totalPages);
           this.posts = response.data;
           this.isPostsLoading = false;
-        }, 700);
       } catch (e) {
         alert("Ошибка: " + e);
       } finally {
@@ -201,6 +189,6 @@ export default {
   border-left: 3px solid #900;
 } */
 .observer {
-  height: 30px;
+  height: 50px;
 }
 </style>

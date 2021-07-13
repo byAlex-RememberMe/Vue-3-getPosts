@@ -1,14 +1,14 @@
 <template>
   <div class="navbar">
     <img 
-      class="navbar__item" 
+      class="navbar__item earth" 
       src="../../public/News.png" 
       alt="#" 
       @click="$router.push('/')" 
     />
     <div class="navbar__items">
-      <my-button class="navbar__item" @click="$router.push('posts')">Новости</my-button>
-      <my-button class="navbar__item" @click="$router.push('about')">О нас</my-button>
+      <my-button class="navbar__item" @click="$router.push('/posts')">Новости</my-button>
+      <my-button class="navbar__item" @click="$router.push('/about')">О нас</my-button>
     </div>
   </div>
 </template>
@@ -40,5 +40,8 @@ export default {
   color: teal;
   font-size: 16px;
   font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+.navbar__item.earth:hover{
+  transform: scale(1.1);
 }
 </style>
